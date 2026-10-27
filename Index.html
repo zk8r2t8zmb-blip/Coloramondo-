@@ -1,0 +1,105 @@
+
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ColoraMondo</title>
+<style>
+body{margin:0;background:#fff5fc;color:#493653;font-family:Arial;text-align:center}
+header{background:#e8d7ff;padding:20px}
+h1{margin:0}
+main{padding:15px;max-width:650px;margin:auto}
+button{border:0;border-radius:12px;padding:12px;margin:5px;background:#e8d7ff;color:#493653;font-weight:bold;font-size:16px}
+.palette{display:flex;justify-content:center;flex-wrap:wrap;gap:8px;margin:15px}
+.color{width:32px;height:32px;padding:0;border-radius:50%;border:2px solid white}
+#drawing{background:white;border:2px dashed #d8c4ed;border-radius:15px;padding:8px;margin:15px auto;max-width:450px}
+svg{width:100%;height:auto}
+svg path,svg circle,svg ellipse,svg rect{stroke:#302638;stroke-width:3;stroke-linejoin:round}
+footer{padding:20px}
+@media print{header,main h2,main h3,main>p,main>.choices,main>.palette,main>.actions,footer{display:none}#drawing{border:0}}
+</style>
+</head>
+<body>
+<header>
+<h1>🌈 ColoraMondo</h1>
+<p>Un mondo magico da colorare!</p>
+</header>
+<main>
+<h2>Scegli il tuo disegno ✨</h2>
+<div class="choices">
+<button onclick="show('unicorno')">🦄 Unicorno</button>
+<button onclick="show('fiore')">🌸 Fiore</button>
+<button onclick="show('farfalla')">🦋 Farfalla</button>
+<button onclick="show('castello')">🏰 Castello</button>
+</div>
+<h3>Scegli un colore</h3>
+<div class="palette" id="palette"></div>
+<p>Tocca una parte del disegno per colorarla!</p>
+<div id="drawing"></div>
+<div class="actions">
+<button onclick="show(current)">↩️ Ricomincia</button>
+<button onclick="window.print()">🖨️ Stampa</button>
+</div>
+</main>
+<footer>ColoraMondo 💜 La fantasia non ha limiti!</footer>
+<script>
+let color='#ff6b9d',current='unicorno';
+const colors=['#ff6b9d','#ffca3a','#8ac926','#4cc9f0','#7b61ff','#ff914d','#f7aef8','#ffffff','#bde0fe','#caffbf'];
+colors.forEach(c=>{
+ let b=document.createElement('button');
+ b.className='color';b.style.background=c;
+ b.onclick=()=>color=c;
+ document.getElementById('palette').appendChild(b);
+});
+const art={
+unicorno:`<svg viewBox="0 0 400 320">
+<path fill="white" d="M100 210 Q65 165 95 125 Q120 95 165 115 L200 55 L220 115 Q275 90 305 145 Q325 185 280 220 L285 270 L245 270 L235 220 L170 220 L160 270 L120 270Z"/>
+<path fill="white" d="M200 60 L215 112 L190 105Z"/>
+<path fill="white" d="M105 130 Q70 95 100 85 Q130 90 140 115Z"/>
+<path fill="white" d="M240 105 Q260 70 280 100 L270 130Z"/>
+<circle fill="white" cx="150" cy="155" r="5"/><circle fill="white" cx="180" cy="155" r="5"/>
+<path fill="white" d="M145 175 Q160 190 177 175"/>
+<path fill="white" d="M130 125 Q100 100 115 85 M155 110 Q140 80 160 70 M180 120 Q180 90 200 85"/>
+</svg>`,
+fiore:`<svg viewBox="0 0 400 320">
+<path fill="white" d="M195 180 Q170 230 180 300 L220 300 Q225 240 205 180Z"/>
+<path fill="white" d="M195 250 Q120 200 110 255 Q145 285 195 265Z"/>
+<path fill="white" d="M205 265 Q260 210 285 255 Q260 290 205 280Z"/>
+<ellipse fill="white" cx="200" cy="105" rx="34" ry="57"/>
+<ellipse fill="white" cx="200" cy="175" rx="34" ry="57"/>
+<ellipse fill="white" cx="165" cy="140" rx="57" ry="34"/>
+<ellipse fill="white" cx="235" cy="140" rx="57" ry="34"/>
+<circle fill="white" cx="200" cy="140" r="38"/>
+</svg>`,
+farfalla:`<svg viewBox="0 0 400 320">
+<path fill="white" d="M190 145 Q115 40 65 85 Q30 135 145 175 Q35 205 75 260 Q125 285 190 195Z"/>
+<path fill="white" d="M210 145 Q285 40 335 85 Q370 135 255 175 Q365 205 325 260 Q275 285 210 195Z"/>
+<ellipse fill="white" cx="200" cy="175" rx="15" ry="65"/>
+<path fill="white" d="M195 115 Q155 60 145 75 M205 115 Q245 60 255 75"/>
+<circle fill="white" cx="115" cy="130" r="16"/><circle fill="white" cx="280" cy="130" r="16"/>
+<circle fill="white" cx="125" cy="220" r="14"/><circle fill="white" cx="275" cy="220" r="14"/>
+</svg>`,
+castello:`<svg viewBox="0 0 400 320">
+<path fill="white" d="M70 290 V145 H125 V105 H155 V145 H245 V105 H275 V145 H330 V290Z"/>
+<path fill="white" d="M55 145 V90 H90 V110 H110 V145Z"/>
+<path fill="white" d="M290 145 V90 H310 V110 H345 V145Z"/>
+<path fill="white" d="M165 145 V65 H235 V145Z"/>
+<path fill="white" d="M155 65 L200 25 L245 65Z"/>
+<rect fill="white" x="165" y="205" width="70" height="85" rx="35"/>
+<rect fill="white" x="95" y="175" width="35" height="40" rx="5"/>
+<rect fill="white" x="270" y="175" width="35" height="40" rx="5"/>
+</svg>`
+};
+function show(name){
+ current=name;
+ document.getElementById('drawing').innerHTML=art[name];
+ document.querySelectorAll('#drawing svg path,#drawing svg circle,#drawing svg ellipse,#drawing svg rect').forEach(el=>{
+ el.style.cursor='pointer';
+ el.onclick=()=>el.setAttribute('fill',color);
+ });
+}
+show(current);
+</script>
+</body>
+</html>
